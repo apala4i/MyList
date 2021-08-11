@@ -18,7 +18,9 @@ public:
 	void insert(T value, int index);
 	void removeAt(int index);
 	void pop_front();
+	void pop_back();
 	void push_back(T);
+	void push_front(T);
 	int get_size() { return Size; }
 	T& operator [] (int index);
 private:
@@ -65,23 +67,21 @@ void List<T>::removeAt(int index)
 template<typename T>
 void List<T>::insert(T value, int index)
 {
-	int current_index = 0;
-	Node<T>* current_Node = head;
-	Node<T>* new_node = new Node<T>(value);
+
 	if (index == 0)
 	{
-		new_node->pNext = head;
-		head = new_node;
+		push_front(value);
 	}
 	else
 	{
+		int current_index = 0;
+		Node<T>* current_Node = head;
 		while (current_index + 1 != index)
 		{
 			current_Node = current_Node->pNext;
 			++current_index;
 		}
-		new_node->pNext = current_Node->pNext;
-		current_Node->pNext = new_node;
+		current_Node->pNext = new Node<T>(value, current_Node->pNext);
 	}
 	++Size;
 }
@@ -154,6 +154,19 @@ void List<T>::print()
 	}
 }
 
+template <typename T>
+void List<T>::push_front(T value)
+{
+	head = new Node<T>(value, head);
+	++Size;
+}
+
+template <typename T>
+void List<T>::pop_back()
+{
+	removeAt(Size - 1);
+}
+
 int main()
 {
 
@@ -163,7 +176,8 @@ int main()
 	joopa.push_back(3);
 	joopa.push_back(4);
 	joopa.print();
-	joopa.removeAt(0);
+	joopa.insert(0, 1);
+	joopa.insert(0, 0);
 	cout << endl << endl;
 	joopa.print();
 	cout << endl;
